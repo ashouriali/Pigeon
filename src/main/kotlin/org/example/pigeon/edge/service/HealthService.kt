@@ -1,7 +1,8 @@
-package org.example.pigeon.core.service
+package org.example.pigeon.edge.service
 
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+
+import com.google.inject.Inject
+import com.google.inject.Singleton
 import org.example.pigeon.core.config.AppConfig
 
 @Singleton

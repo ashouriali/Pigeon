@@ -1,7 +1,7 @@
-package org.example.pigeon.core.persistence.database.mssqlServer.config
+package org.example.pigeon.core.persistence.database.postgreSQL.config
 
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import com.google.inject.Inject
+import com.google.inject.Singleton
 import org.example.pigeon.core.persistence.config.BaseDataSourceConfig
 import org.example.pigeon.core.persistence.config.BaseHikariConfig
 
