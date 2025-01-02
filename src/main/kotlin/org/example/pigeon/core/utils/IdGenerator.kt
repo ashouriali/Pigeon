@@ -1,8 +1,8 @@
 package org.example.pigeon.core.utils
 
 import com.github.f4b6a3.tsid.TsidFactory
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import com.google.inject.Inject
+import com.google.inject.Singleton
 import org.example.pigeon.core.config.AppConfig
 import java.util.concurrent.ThreadLocalRandom
 

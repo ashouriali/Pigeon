@@ -1,10 +1,10 @@
-package org.example.pigeon.core.persistence.database.mssqlServer.config
+package org.example.pigeon.core.persistence.database.postgreSQL.config
 
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
+import com.google.inject.Singleton
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import jakarta.inject.Singleton
 import org.example.pigeon.core.config.AppConfig
 import org.example.pigeon.core.guice.Factory
 
@@ -16,9 +16,6 @@ class PostgreSQLFactory: AbstractModule() {
     @Provides
     @Singleton
     fun create(config: AppConfig): Database {
-//        if(TransformerApp.appMode == AppMode.TEST)
-
-
         val pgConfig = config.dataSource.postgreSQL
         val dataSource = HikariConfig().apply {
             this.poolName = pgConfig.hikari.poolName

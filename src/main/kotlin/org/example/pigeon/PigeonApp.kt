@@ -5,30 +5,26 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.Key
 import io.javalin.Javalin
-import org.example.pigeon.core.component.BaseComponent
-import org.example.pigeon.core.config.AppMode
-import org.example.pigeon.core.controller.BaseController
 import org.example.pigeon.core.guice.Factory
+import org.example.pigeon.core.server.AppServer
+import org.example.pigeon.core.server.BaseController
 import org.example.pigeon.core.utils.ReflectionUtils
 
 fun main(args: Array<String>) {
-    val params = PigeonParams.create(args)
-    PigeonApp().setUp(AppMode.fromString(params.mode), params.port)
+    PigeonApp().setUp()
 }
+
+data class PigeonAppAddress(val host: String, val port: Int)
 
 class PigeonApp {
     private lateinit var injector: Injector
 
-    companion object {
-        lateinit var appMode: AppMode
-    }
 
-    fun setUp(mode: AppMode, port: Int) {
-        appMode = mode
+    fun setUp(): PigeonAppAddress {
         createGuiceModules()
-        setUpWebServer(port)
+        val appAddress = startWebServer()
         setUpControllers()
-        setUpComponents()
+        return appAddress
     }
 
     private fun createGuiceModules() {
@@ -36,18 +32,20 @@ class PigeonApp {
         injector = Guice.createInjector(modules.map { it.getConstructor().newInstance() as AbstractModule })
     }
 
-    private fun setUpWebServer(port: Int) {
-        injector.getInstance(Javalin::class.java).start(port)
+    private fun startWebServer(): PigeonAppAddress {
+        val javalin = injector.getInstance(Javalin::class.java)
+        javalin.start()
+        val serverUri = javalin.jettyServer().server().uri
+        return PigeonAppAddress(serverUri.host, serverUri.port)
     }
 
     private fun setUpControllers() {
-        val controllers = ReflectionUtils.scanType(BaseController::class.java) ?: error("")
-        controllers.onEach { injector.getInstance(Key.get(it)).handleRequests() }
-    }
+        val controllers: List<BaseController> = ReflectionUtils.scanType(BaseController::class.java)?.map {
+            injector.getInstance(Key.get(it))
+        } ?: error("There is no controller!")
 
-    private fun setUpComponents() {
-        val components = ReflectionUtils.scanType(BaseComponent::class.java) ?: error("")
-        components.onEach { injector.getInstance(Key.get(it)) }
+        val appServer = injector.getInstance(AppServer::class.java)
+       appServer.setUpControllers(controllers)
     }
 
 }
