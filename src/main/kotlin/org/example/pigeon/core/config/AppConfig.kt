@@ -1,5 +1,6 @@
 package org.example.pigeon.core.config
 
+
 import com.google.inject.Inject
 import com.google.inject.Singleton
 import org.example.pigeon.core.persistence.config.DataSource

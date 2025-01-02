@@ -31,7 +31,7 @@ class PigeonApp {
         val modules = ReflectionUtils.scanAnnotation(Factory::class.java) ?: error("")
         injector = Guice.createInjector(modules.map { it.getConstructor().newInstance() as AbstractModule })
     }
-
+    
     private fun startWebServer(): PigeonAppAddress {
         val javalin = injector.getInstance(Javalin::class.java)
         javalin.start()
