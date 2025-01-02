@@ -6,7 +6,7 @@ import org.example.pigeon.base.PigeonTest
 import org.junit.jupiter.api.Test
 
 @PigeonTest
-internal class HealthControllerTest {
+internal class HealthBaseControllerTest {
 
     @Test
     fun `app should start correctly`() {
